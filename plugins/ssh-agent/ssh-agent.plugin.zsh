@@ -12,9 +12,15 @@ function _start_agent() {
 }
 
 function _add_identities() {
-	local id line sig
+	local id line sig agent_os_keys
 	local -a identities loaded_sigs loaded_ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
+
+	if [[ `uname` == 'Darwin' ]] then # MacOS X
+		agent_os_keys="-A -K"
+	else
+		agent_os_keys=""
+	fi
 
 	# check for .ssh folder presence
 	if [[ ! -d $HOME/.ssh ]]; then
@@ -46,7 +52,7 @@ function _add_identities() {
 		fi
 	done
 
-	[[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
+	[[ -n "$not_loaded" ]] && ssh-add ${agent_os_keys} ${^not_loaded}
 }
 
 # Get the filename to store/lookup the environment from
