@@ -11,6 +11,7 @@ function _start_agent() {
 	. $_ssh_env_cache > /dev/null
 }
 
+function _add_identities() {
 	local id line sig agent_os_keys
 	local -a identities loaded_sigs loaded_ids not_loaded
 	zstyle -a :omz:plugins:ssh-agent identities identities
